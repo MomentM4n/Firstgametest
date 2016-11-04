@@ -1,10 +1,14 @@
 package main;
 
+import gui.AppFrame;
+
 public class Test {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		
+		AppFrame app = new AppFrame();
+		app.initGameWindow();
+		
 	}
 
 }
