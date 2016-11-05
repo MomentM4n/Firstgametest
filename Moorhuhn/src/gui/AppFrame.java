@@ -39,7 +39,7 @@ public class AppFrame extends GameFrame {
 		super("RAF Game",dim.width - dim.width/3, dim.height - 100);
 		setHighQuality(true);
 		System.out.println(this.getX());
-		centerFrame();
+		//centerFrame();
 		System.out.println(this.getX());
 		
 		
@@ -52,6 +52,8 @@ public class AppFrame extends GameFrame {
 			    cursorImg, new Point(0, 0), "blank cursor");
 		this.setCursor(c);
 		initBird();
+		initGameWindow();
+		this.getWindow().setLocationRelativeTo(null);
 		
 		startThread();
 	}
@@ -59,7 +61,7 @@ public class AppFrame extends GameFrame {
 	public void initComponents(){
 		
 		sniper = new Sniper();
-		//backgroundImage = Util.loadImage("pictures/unnamed.png");
+		backgroundImage = Util.loadImage("pictures/background.jpg");
        // BufferedImage im = Util.loadImage("pictures/final.png");
 		sniperImage = Util.loadImage("pictures/sniper.png");
 		
