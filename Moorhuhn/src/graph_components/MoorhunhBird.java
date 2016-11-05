@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class MoorhunhBird {
 
+	
 	private int posX;
 	private int posY;
 	private MoorhunhBirdSheet birdSheet;
@@ -18,11 +19,12 @@ public class MoorhunhBird {
 	private int frameCountdown = 0;
 	
 	public MoorhunhBird(MoorhunhBirdSheet sheet, int posX, int posY){
+		
 		birdSheet = sheet;
 		this.posX = posX;
 		this.posY = posY;
 		Random r = new Random();
-		movingSpeed = r.nextInt(3)+2;
+		movingSpeed = r.nextInt(3)+3;
 		rowInSheetID = r.nextInt(3);
 	}
 	
@@ -47,6 +49,8 @@ public class MoorhunhBird {
 		posY += movY;
 	}
 	
+	public MoorhunhBirdSheet getSheet(){return birdSheet;  }
+	public void setBirdSheet(MoorhunhBirdSheet newSheet){birdSheet = newSheet; }	
 	public int getRowInSheetID() { return rowInSheetID; }
 	public int getColumnInSheetID() { return columnInSheetID; }
 	public int getMovingSpeed(){return movingSpeed; }
