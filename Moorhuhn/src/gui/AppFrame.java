@@ -150,8 +150,8 @@ public class AppFrame extends GameFrame {
 
 		Random r = new Random();
 		// initBirds
-		normalBird = new NormalSlideMoorhunhBird("pictures/NormalBird.png", this.getX() + r.nextInt(this.getWidth() - this.getX()),
-				(this.getY() + this.getHeight() + 200) + r.nextInt(1000 - (this.getY() + this.getHeight() + 200)));
+		normalBird = new NormalSlideMoorhunhBird("pictures/NormalBird.png", this.getX() + r.nextInt((this.getWidth() - 300) - this.getX()),
+				(this.getY() + this.getHeight() + 200) + r.nextInt(5000 - (this.getY() + this.getHeight() + 200)));
 		
 		flyingBirds = new HashMap<>();
 		
@@ -283,7 +283,6 @@ public class AppFrame extends GameFrame {
 					int maxH = HEIGHT - 320;
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 					bird.setAnimationInterval();
-					System.out.println(bird.getMovingSpeed() + " - " + bird.getAnimationInterval());
 					bird.setDead(false);
 					bird.setBirdSheet(birdSheetLeft);
 				}
@@ -297,7 +296,6 @@ public class AppFrame extends GameFrame {
 					int maxH = HEIGHT - 320;
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 					bird.setAnimationInterval();
-					System.out.println(bird.getMovingSpeed() + " - " + bird.getAnimationInterval());
 					bird.setDead(false);
 					bird.setBirdSheet(birdSheetRight);
 				}
@@ -321,7 +319,6 @@ public class AppFrame extends GameFrame {
 					int maxH = HEIGHT - 320;
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 					bird.setAnimationInterval();
-					System.out.println(bird.getMovingSpeed() + " - " + bird.getAnimationInterval());
 					bird.setDead(false);
 				}
 			}
@@ -340,7 +337,6 @@ public class AppFrame extends GameFrame {
 					int maxH = HEIGHT - 320;
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 					bird.setAnimationInterval();
-					System.out.println(bird.getMovingSpeed() + " - " + bird.getAnimationInterval());
 					bird.setDead(false);
 				}
 
@@ -530,8 +526,11 @@ public class AppFrame extends GameFrame {
 					}
 				}
 				
-				if(sniper.contains(((NormalSlideMoorhunhBird)normalBird).getPosX()+30, ((NormalSlideMoorhunhBird)normalBird).getPosY() + 100, ((NormalSlideMoorhunhBird)normalBird).getImage().getWidth() - 40, ((NormalSlideMoorhunhBird)normalBird).getImage().getHeight())){
-					System.out.println("Pogodili smo veliku pticu");
+				if(sniper.contains(((NormalSlideMoorhunhBird)normalBird).getPosX()+110, ((NormalSlideMoorhunhBird)normalBird).getPosY() + 100, ((NormalSlideMoorhunhBird)normalBird).getImage().getWidth() - 230, ((NormalSlideMoorhunhBird)normalBird).getImage().getHeight())){
+					System.out.println("Pogodili smo slide pticu");
+					((NormalSlideMoorhunhBird)normalBird).setDead(true);
+					playSound(deadSound);
+					score += 25;
 				}
 				
 				if (gameActive == true)

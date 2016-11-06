@@ -28,7 +28,6 @@ public class MoorhunhBird {
 		Random r = new Random();
 		movingSpeed = r.nextInt(2)+1;
 		setAnimationInterval();
-		System.out.println(getMovingSpeed() + " - " + getAnimationInterval());
 		rowInSheetID = r.nextInt(3) + 1;
 	}
 	

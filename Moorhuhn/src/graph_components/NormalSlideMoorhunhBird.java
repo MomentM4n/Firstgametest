@@ -41,15 +41,15 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 
 		Random r = new Random();
 		// Proveravamo da li je izasla cela slika, ako jeste stopiramo kretanje
-		if (this.getPosY() + this.getImage().getHeight() - 70 < frame.getY() + frame.getHeight()) {
+		if (!isDead && this.getPosY() + this.getImage().getHeight() - 70 < frame.getY() + frame.getHeight()) {
 			this.setStop(true);
 			this.move(0, 6);
 			startTimeBird = System.currentTimeMillis();
-			birdDuration = 1000;
+			birdDuration = 4000;
 
 		}
 		// noramalno kretanje ka gore
-		if (!this.isStop()) {
+		if (!isDead && !this.isStop()) {
 			if (!this.isGoingDown()) {
 				this.move(0, -(this.getMovingSpeed()));
 			}
@@ -60,14 +60,14 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 
 		}
 		// Proveravamo da li je proslo 3 sekunde, ako jeste spustamo pticu dole
-		if (startTimeBird != 0 && birdDuration - (System.currentTimeMillis() - startTimeBird) <= 0) {
+		if (!isDead && startTimeBird != 0 && birdDuration - (System.currentTimeMillis() - startTimeBird) <= 0) {
 			this.setGoingDown(true);
 			this.setStop(false);
 			this.setMovingSpeed(11);
 
 		}
 		// krecemo se ka dole
-		if (!this.isStop() && this.isGoingDown()) {
+		if (!isDead && !this.isStop() && this.isGoingDown()) {
 			this.move(0, this.getMovingSpeed());
 		}
 
@@ -75,11 +75,17 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 		if (this.getPosY() > frame.getY() + frame.getHeight() && this.isGoingDown()) {
 			this.setGoingDown(false);
 			this.setStop(false);
+			this.setDead(false);
 			startTimeBird = 0;
 			this.setMovingSpeed(r.nextInt(3)+5);
-			this.setPosition(frame.getX() + r.nextInt(frame.getWidth() - frame.getX()),
+			this.setPosition(frame.getX() + r.nextInt((frame.getWidth() - 300) - frame.getX()),
 					(frame.getY() + frame.getHeight() + 200)
-							+ r.nextInt(3000 - (frame.getY() + frame.getHeight() + 1500)));
+							+ r.nextInt(10000 - (frame.getY() + frame.getHeight() + 1500)));
+		}
+		if(isDead){
+			this.setMovingSpeed(18);
+			this.setGoingDown(true);
+			this.move(0, this.getMovingSpeed());
 		}
 
 	}
