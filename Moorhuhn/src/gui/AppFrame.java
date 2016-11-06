@@ -358,11 +358,11 @@ public class AppFrame extends GameFrame {
 			offX += 10;
 		} else if (mouseX <= 100) {
 			offX -= 10;
-		} else if (mouseY >= getHeight() - 100) {
+		} /*else if (mouseY >= getHeight() - 100) {
 			offY += 10;
 		} else if (mouseY <= 100) {
 			offY -= 10;
-		}
+		}*/
 			}
 		int[] curTime = getTime();
 		currentTimeMinutes = curTime[1];
