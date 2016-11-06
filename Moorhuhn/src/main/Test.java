@@ -7,13 +7,13 @@ import gui.Start;
 
 public class Test {
 
+	private static Test testInstance = null;
+	
 	public static void main(String[] args) {
 		
 		AppFrame app = new AppFrame();
 		app.initGameWindow();
-		
-//		Start start = new Start();
-		
 	}
+	
 
 }

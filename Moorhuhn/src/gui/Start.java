@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 
+import main.Test;
 import rafgfxlib.GameFrame;
 import rafgfxlib.Util;
 
@@ -62,13 +63,11 @@ public class Start extends GameFrame {
 		if(button == GFMouseButton.Left) {
 			if(getMouseX() > 25 && getMouseX() < 305 && getMouseY() > 215 && getMouseY() < 275) {
 				System.out.println("new game");
-				AppFrame app = new AppFrame();
-				app.initGameWindow();
-				getWindow().setVisible(false);	
+				setVisible(false);
 			}
 			if(getMouseX() > 85 && getMouseX() < 235 && getMouseY() > 285 && getMouseY() < 345) {
 				System.out.println("quite game");
-				getWindow().dispose();
+				getWindow().setVisible(false);
 			}
 		}
 	}
