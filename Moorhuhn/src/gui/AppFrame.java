@@ -27,6 +27,7 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import graph_components.Bullets;
+import graph_components.Feathers;
 import graph_components.MoorhunhBird;
 import graph_components.MoorhunhBirdSheet;
 import graph_components.Sniper;
@@ -68,6 +69,8 @@ public class AppFrame extends GameFrame {
 	private int currentTimeSeconds;
 
 	private int score;
+	
+	private Feathers feathers;
 
 	public AppFrame() {
 
@@ -108,8 +111,9 @@ public class AppFrame extends GameFrame {
 		deadSound = Applet.newAudioClip(getClass().getResource("/sounds/deadsound.wav"));
 		startCover = Util.loadImage("pictures/start.jpg");
 		gameActive = false;
-		playTime = 15000;
+		playTime = 60000;
 		score = 0;
+		feathers = new Feathers();
 	}
 
 	private void centerFrame() {
@@ -231,6 +235,7 @@ public class AppFrame extends GameFrame {
 		sniper.setWidth(sniperImage.getWidth());
 		sniper.setHeight(sniperImage.getHeight());
 		g.drawImage(sniperImage, getMouseX() - 20, getMouseY() - 20, this);
+		feathers.render(g, sw, sh);
 
 	}
 
@@ -238,6 +243,7 @@ public class AppFrame extends GameFrame {
 	public void update() {
 		if (gameActive == true) {
 			Random r = new Random();
+			feathers.update();
 			for (MoorhunhBird bird : flyingBirds.keySet()) {
 
 				// Proveravamo da li je ptica mrtva, ako jeste , proveravamo da
@@ -404,7 +410,7 @@ public class AppFrame extends GameFrame {
 							bird.setDead(true);
 							playSound(deadSound);
 							score += 5;
-
+							feathers.genEx(x, y, 10.0f, 300, 50);
 						}
 
 						if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 1
@@ -417,6 +423,7 @@ public class AppFrame extends GameFrame {
 							bird.setDead(true);
 							playSound(deadSound);
 							score += 10;
+							feathers.genEx(x, y, 10.0f, 300, 50);
 						}
 
 						if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 2
@@ -429,6 +436,7 @@ public class AppFrame extends GameFrame {
 							bird.setDead(true);
 							playSound(deadSound);
 							score += 15;
+							feathers.genEx(x, y, 10.0f, 300, 50);
 						}
 						if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 3
 								&& sniper.contains(bird.getPositionX() + 43, bird.getPositionY() + 20,
@@ -441,6 +449,7 @@ public class AppFrame extends GameFrame {
 							bird.setDead(true);
 							playSound(deadSound);
 							score += 20;
+							feathers.genEx(x, y, 10.0f, 300, 50);
 						}
 
 						if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 0
@@ -453,6 +462,7 @@ public class AppFrame extends GameFrame {
 							bird.setDead(true);
 							playSound(deadSound);
 							score += 5;
+							feathers.genEx(x, y, 10.0f, 300, 50);
 						}
 
 						if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 1
@@ -465,6 +475,7 @@ public class AppFrame extends GameFrame {
 							bird.setDead(true);
 							playSound(deadSound);
 							score += 10;
+							feathers.genEx(x, y, 10.0f, 300, 50);
 						}
 
 						if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 2
@@ -477,6 +488,7 @@ public class AppFrame extends GameFrame {
 							bird.setDead(true);
 							playSound(deadSound);
 							score += 15;
+							feathers.genEx(x, y, 10.0f, 300, 50);
 						}
 
 						if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 3
@@ -490,6 +502,7 @@ public class AppFrame extends GameFrame {
 							bird.setDead(true);
 							playSound(deadSound);
 							score += 20;
+							feathers.genEx(x, y, 10.0f, 300, 50);
 						}
 					}
 				}
