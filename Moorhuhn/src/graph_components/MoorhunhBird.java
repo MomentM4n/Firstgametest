@@ -14,6 +14,8 @@ public class MoorhunhBird {
 	private int columnInSheetID = 0;
 	private int movingSpeed = 3;
 	
+	private boolean isDead = false;
+	
 	//da se ne prebacuju slike previse brzo
 	private int frameInterval = 2;
 	private int frameCountdown = 0;
@@ -25,7 +27,8 @@ public class MoorhunhBird {
 		this.posY = posY;
 		Random r = new Random();
 		movingSpeed = r.nextInt(3)+3;
-		rowInSheetID = r.nextInt(3);
+		//movingSpeed = r.nextInt(2)+1;
+		rowInSheetID = r.nextInt(3) + 1;
 	}
 	
 	//poziva se prilikom kretanja , da bi se slicice u istoj koloni menjale
@@ -48,6 +51,8 @@ public class MoorhunhBird {
 		posX += movX;
 		posY += movY;
 	}
+	
+    
 	
 	public MoorhunhBirdSheet getSheet(){return birdSheet;  }
 	public void setBirdSheet(MoorhunhBirdSheet newSheet){birdSheet = newSheet; }	
@@ -79,5 +84,8 @@ public class MoorhunhBird {
 	
 	public int getPositionX() { return posX; }
 	public int getPositionY() { return posY; }
+	public boolean isDead(){return isDead;}
+	public void setDead(boolean b){isDead = b;}
+	
 	
 }

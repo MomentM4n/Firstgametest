@@ -44,9 +44,13 @@ public class Sniper implements Shape{
 	}
 
 	@Override
-	public boolean contains(double arg0, double arg1, double arg2, double arg3) {
-		// TODO Auto-generated method stub
+	public boolean contains(double xE, double yE, double widthE, double heightE) {
+	
+		if (x < xE + (widthE) && x + width > xE && y < yE + (heightE) && height + y >yE) {
+			return true;
+		}
 		return false;
+		
 	}
 
 	@Override
