@@ -92,7 +92,7 @@ public class MoorhunhBirdSheet {
 				int pixel = sheet.getRGB(x, y);
 				int neg = 0xFFFFFF - pixel;
 				int neg1 = pixel;
-				if(! ((neg1>>24) == 0x00) ) {
+				if(! ((neg1>>24) == 0x00) ) { //detects if pixel is transparent if it is just skip it
 
 					neg1 = (0xFFFFFF - pixel) | 0xFF000000;
 				}
