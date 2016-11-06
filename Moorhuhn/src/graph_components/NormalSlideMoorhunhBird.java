@@ -43,10 +43,9 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 		// Proveravamo da li je izasla cela slika, ako jeste stopiramo kretanje
 		if (this.getPosY() + this.getImage().getHeight() - 70 < frame.getY() + frame.getHeight()) {
 			this.setStop(true);
-			System.out.println("pozvao sam 1. put");
 			this.move(0, 6);
 			startTimeBird = System.currentTimeMillis();
-			birdDuration = 3000;
+			birdDuration = 1000;
 
 		}
 		// noramalno kretanje ka gore
@@ -62,7 +61,6 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 		}
 		// Proveravamo da li je proslo 3 sekunde, ako jeste spustamo pticu dole
 		if (startTimeBird != 0 && birdDuration - (System.currentTimeMillis() - startTimeBird) <= 0) {
-			System.out.println("aloooo");
 			this.setGoingDown(true);
 			this.setStop(false);
 			this.setMovingSpeed(11);
@@ -112,7 +110,5 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 		g.drawImage(image, posX, posY, null);
 		
 	}
-
-	
 	
 }

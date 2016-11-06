@@ -12,12 +12,12 @@ public class MoorhunhBird {
 	
 	private int rowInSheetID = 1;
 	private int columnInSheetID = 0;
-	private int movingSpeed = 3;
+	private int movingSpeed = 2;
 	
 	private boolean isDead = false;
 	
 	//da se ne prebacuju slike previse brzo
-	private int frameInterval = 2;
+	private int frameInterval = 4;
 	private int frameCountdown = 0;
 	
 	public MoorhunhBird(MoorhunhBirdSheet sheet, int posX, int posY){
@@ -26,8 +26,9 @@ public class MoorhunhBird {
 		this.posX = posX;
 		this.posY = posY;
 		Random r = new Random();
-		movingSpeed = r.nextInt(3)+3;
-		//movingSpeed = r.nextInt(2)+1;
+		movingSpeed = r.nextInt(2)+1;
+		setAnimationInterval();
+		System.out.println(getMovingSpeed() + " - " + getAnimationInterval());
 		rowInSheetID = r.nextInt(3) + 1;
 	}
 	
@@ -83,11 +84,10 @@ public class MoorhunhBird {
 			frameInterval = 6;
 			break;
 		case 2 :
-			frameInterval = 4;
+			frameInterval = 5;
 			break;
 		case 3 :
-			frameInterval = 2;
-		
+			frameInterval = 4;
 			break;
 		}
 	}

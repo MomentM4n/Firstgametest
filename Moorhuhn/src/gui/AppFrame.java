@@ -75,9 +75,6 @@ public class AppFrame extends GameFrame {
 	private long playTime;
 	private int currentTimeMinutes;
 	private int currentTimeSeconds;
-	
-//	private int birdDuration = 3000;
-//	private long startTimeBird = 0;
 
 	private int score;
 	
@@ -161,14 +158,14 @@ public class AppFrame extends GameFrame {
 		// Konstruisemo 5 ptica koje lete na levu stranu
 		for (int i = 0; i < 5; i++) {
 			MoorhunhBird bird = new MoorhunhBird(birdSheetLeft, r.nextInt(2000), r.nextInt(HEIGHT - 200));
-			bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
+			bird.setAnimationInterval();
 			flyingBirds.put(bird, "left");
 
 		}
 		// Konstruisemo 5 ptica koje lete na desnu stranu
 		for (int i = 0; i < 5; i++) {
 			MoorhunhBird bird = new MoorhunhBird(birdSheetRight, r.nextInt(2000), r.nextInt(HEIGHT - 200));
-			bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
+			bird.setAnimationInterval();
 			flyingBirds.put(bird, "right");
 
 		}
@@ -277,28 +274,30 @@ public class AppFrame extends GameFrame {
 				bird.setMovingSpeed(8);
 				bird.move(0, bird.getMovingSpeed());
 				if (bird.getPositionY() > this.getY() + this.getHeight() && flyingBirds.get(bird).equals("left")) {
-					 bird.setMovingSpeed(r.nextInt(3)+3);
+					 bird.setMovingSpeed(r.nextInt(3)+1);
 					//bird.setMovingSpeed(r.nextInt(2) + 2);
 					bird.setRowInSheetID(r.nextInt(3));
 					int minW = this.getX() + this.getWidth() + bird.getSheet().getFrameWidth();
-					int maxW = 2 * dim.width;
+					int maxW = 2 * WIDTH;
 					int minH = 50;
-					int maxH = dim.height - 320;
+					int maxH = HEIGHT - 320;
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
-					bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
+					bird.setAnimationInterval();
+					System.out.println(bird.getMovingSpeed() + " - " + bird.getAnimationInterval());
 					bird.setDead(false);
 					bird.setBirdSheet(birdSheetLeft);
 				}
 				if (bird.getPositionY() > this.getY() + this.getHeight() && flyingBirds.get(bird).equals("right")) {
-					bird.setMovingSpeed(r.nextInt(3) + 3);
+					bird.setMovingSpeed(r.nextInt(3) + 1);
 					// bird.setMovingSpeed(r.nextInt(2)+1);
 					bird.setRowInSheetID(r.nextInt(3));
-					int minW = -2 * dim.width;
+					int minW = -2 * WIDTH;
 					int maxW = this.getX() - bird.getSheet().getFrameWidth();
 					int minH = 50;
-					int maxH = dim.height - 320;
+					int maxH = HEIGHT - 320;
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
-					bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
+					bird.setAnimationInterval();
+					System.out.println(bird.getMovingSpeed() + " - " + bird.getAnimationInterval());
 					bird.setDead(false);
 					bird.setBirdSheet(birdSheetRight);
 				}
@@ -314,14 +313,15 @@ public class AppFrame extends GameFrame {
 				bird.move(-(bird.getMovingSpeed()), 0);
 				if (bird.getPositionX() + bird.getSheet().getFrameWidth() < this.getX()) {
 					//bird.setMovingSpeed(r.nextInt(3) + 3);
-					 bird.setMovingSpeed(r.nextInt(2)+1);
+					 bird.setMovingSpeed(r.nextInt(3)+1);
 					bird.setRowInSheetID(r.nextInt(3));
 					int minW = this.getX() + this.getWidth() + bird.getSheet().getFrameWidth();
-					int maxW = 2 * dim.width;
+					int maxW = 2 * WIDTH;
 					int minH = 50;
-					int maxH = dim.height - 320;
+					int maxH = HEIGHT - 320;
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 					bird.setAnimationInterval();
+					System.out.println(bird.getMovingSpeed() + " - " + bird.getAnimationInterval());
 					bird.setDead(false);
 				}
 			}
@@ -332,14 +332,15 @@ public class AppFrame extends GameFrame {
 				bird.move(bird.getMovingSpeed(), 0);
 				if (bird.getPositionX() > this.getX() + this.getWidth()) {
 					//bird.setMovingSpeed(r.nextInt(3) + 3);
-					bird.setMovingSpeed(r.nextInt(2)+1);
+					bird.setMovingSpeed(r.nextInt(3)+1);
 					bird.setRowInSheetID(r.nextInt(3));
-					int minW = -2 * dim.width;
+					int minW = -2 * WIDTH;
 					int maxW = this.getX() - bird.getSheet().getFrameWidth();
 					int minH = 50;
-					int maxH = dim.height - 320;
+					int maxH = HEIGHT - 320;
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 					bird.setAnimationInterval();
+					System.out.println(bird.getMovingSpeed() + " - " + bird.getAnimationInterval());
 					bird.setDead(false);
 				}
 
@@ -528,6 +529,11 @@ public class AppFrame extends GameFrame {
 						feathers.genEx(x, y, 10.0f, 300, 50);
 					}
 				}
+				
+				if(sniper.contains(((NormalSlideMoorhunhBird)normalBird).getPosX()+30, ((NormalSlideMoorhunhBird)normalBird).getPosY() + 100, ((NormalSlideMoorhunhBird)normalBird).getImage().getWidth() - 40, ((NormalSlideMoorhunhBird)normalBird).getImage().getHeight())){
+					System.out.println("Pogodili smo veliku pticu");
+				}
+				
 				if (gameActive == true)
 					bullets.setCurrentNumberOfBullets(bullets.getCurrentNumberOfBullets() - 1);
 			} else {
