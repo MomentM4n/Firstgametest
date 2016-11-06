@@ -42,6 +42,9 @@ public class AppFrame extends GameFrame {
 	// VALUE
 	// predstavlja smer letenja ptica ("left" or "right").
 	private HashMap<MoorhunhBird, String> flyingBirds;
+	
+	public static final int WIDTH = 900;
+	public static final int HEIGHT = 600;
 
 	private MoorhunhBirdSheet birdSheetLeft;
 	private MoorhunhBirdSheet birdSheetRight;
@@ -75,7 +78,7 @@ public class AppFrame extends GameFrame {
 	public AppFrame() {
 
 		// Postavljamo prozor aplikacije na sredinu ekrana = NEUSPESNO
-		super("RAF Game", 900, 600);
+		super("RAF Game", WIDTH, HEIGHT);
 		// super("RAF Game",800, 600);
 		setHighQuality(true);
 		// System.out.println(this.getX());
@@ -100,6 +103,7 @@ public class AppFrame extends GameFrame {
 	}
 
 	public void initComponents() {
+		setUpdateRate(60);
 		bullets = new Bullets(8);
 		sniper = new Sniper();
 		backgroundImage = Util.loadImage("pictures/background.jpg");
@@ -144,14 +148,14 @@ public class AppFrame extends GameFrame {
 		Random r = new Random();
 		// Konstruisemo 5 ptica koje lete na levu stranu
 		for (int i = 0; i < 5; i++) {
-			MoorhunhBird bird = new MoorhunhBird(birdSheetLeft, r.nextInt(2000), r.nextInt(dim.height - 200));
+			MoorhunhBird bird = new MoorhunhBird(birdSheetLeft, r.nextInt(2000), r.nextInt(HEIGHT - 200));
 			bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
 			flyingBirds.put(bird, "left");
 
 		}
 		// Konstruisemo 5 ptica koje lete na desnu stranu
 		for (int i = 0; i < 5; i++) {
-			MoorhunhBird bird = new MoorhunhBird(birdSheetRight, r.nextInt(2000), r.nextInt(dim.height - 200));
+			MoorhunhBird bird = new MoorhunhBird(birdSheetRight, r.nextInt(2000), r.nextInt(HEIGHT - 200));
 			bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
 			flyingBirds.put(bird, "right");
 
@@ -176,21 +180,21 @@ public class AppFrame extends GameFrame {
 		g.setFont(new Font("Gulim", Font.BOLD, 30));
 		g.setColor(Color.RED);
 		if (gameActive) {
-			int x = (backgroundImage.getWidth() - getWidth()) / 2 + offX;
+			int x = (backgroundImage.getWidth() - WIDTH) / 2 + offX;
 			// Util.clamp(x, 10, getWidth());
-			int y = (backgroundImage.getHeight() - getHeight()) / 2 + offY;
+			int y = (backgroundImage.getHeight() - HEIGHT) / 2 + offY;
 			// Util.clamp(y, 10, getHeight());
 			if (x < 0) {
 				x = 0;
 			}
-			if (x > (backgroundImage.getWidth() - getWidth() - 50)) {
-				x = (backgroundImage.getWidth() - getWidth() - 50);
+			if (x > (backgroundImage.getWidth() - WIDTH - 50)) {
+				x = (backgroundImage.getWidth() - WIDTH - 50);
 			}
 			if (y < 0) {
 				y = 1;
 			}
-			if (y > (backgroundImage.getHeight() - getHeight() - 50)) {
-				y = (backgroundImage.getHeight() - getHeight() - 50);
+			if (y > (backgroundImage.getHeight() - HEIGHT - 50)) {
+				y = (backgroundImage.getHeight() - HEIGHT - 50);
 			}
 			// System.out.println(x + ":" + y);
 			// System.out.println(backgroundImage.getWidth());
@@ -198,7 +202,7 @@ public class AppFrame extends GameFrame {
 			// System.out.println(offX);
 
 			BufferedImage img = backgroundImage;
-			img = img.getSubimage(x, y, this.getWindow().getWidth(), this.getWindow().getHeight());
+			img = img.getSubimage(x, y, WIDTH, HEIGHT);
 			g.drawImage(img, 0, 0, this);
 			// System.out.println(x + " " + y);
 
@@ -208,17 +212,17 @@ public class AppFrame extends GameFrame {
 			}
 
 			for (int i = 0; i < bullets.getCurrentNumberOfBullets(); i++) {
-				g.drawImage(bullets.getBulletImg(), getWidth() - 50 - i * 30, getHeight() - 100, this);
+				g.drawImage(bullets.getBulletImg(), WIDTH - 50 - i * 30, getHeight() - 100, this);
 			}
 			if (currentTimeSeconds >= 10) {
-				g.drawString("0" + currentTimeMinutes + ":" + currentTimeSeconds, getWidth() - 100, 50);
+				g.drawString("0" + currentTimeMinutes + ":" + currentTimeSeconds, WIDTH - 100, 50);
 			} else {
-				g.drawString("0" + currentTimeMinutes + ":" + "0" + currentTimeSeconds, getWidth() - 100, 50);
+				g.drawString("0" + currentTimeMinutes + ":" + "0" + currentTimeSeconds, WIDTH - 100, 50);
 			}
 			g.drawString(score + "", 30, 50);
 		}
 		if (gameActive == false) {
-			g.drawImage(startCover, 0, 0, getWidth(), getHeight(), 0, 0, startCover.getWidth(), startCover.getHeight(),
+			g.drawImage(startCover, 0, 0, WIDTH, getHeight(), 0, 0, startCover.getWidth(), startCover.getHeight(),
 					this);
 			if (score != 0) {
 				g.setFont(new Font("Gulim", Font.BOLD, 50));
@@ -258,10 +262,10 @@ public class AppFrame extends GameFrame {
 						// bird.setMovingSpeed(r.nextInt(3)+3);
 						bird.setMovingSpeed(r.nextInt(1) + 1);
 						bird.setRowInSheetID(r.nextInt(3));
-						int minW = this.getX() + this.getWidth() + bird.getSheet().getFrameWidth();
-						int maxW = 2 * dim.width;
+						int minW = this.getX() + WIDTH + bird.getSheet().getFrameWidth();
+						int maxW = 2 * WIDTH;
 						int minH = 50;
-						int maxH = dim.height - 320;
+						int maxH = HEIGHT - 320;
 						bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 						bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
 						bird.setDead(false);
@@ -271,10 +275,10 @@ public class AppFrame extends GameFrame {
 						bird.setMovingSpeed(r.nextInt(3) + 3);
 						// bird.setMovingSpeed(r.nextInt(1)+1);
 						bird.setRowInSheetID(r.nextInt(3));
-						int minW = -2 * dim.width;
+						int minW = -2 * WIDTH;
 						int maxW = this.getX() - bird.getSheet().getFrameWidth();
 						int minH = 50;
-						int maxH = dim.height - 320;
+						int maxH = HEIGHT - 320;
 						bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 						bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
 						bird.setDead(false);
@@ -296,10 +300,10 @@ public class AppFrame extends GameFrame {
 						bird.setMovingSpeed(r.nextInt(3) + 3);
 						// bird.setMovingSpeed(r.nextInt(1)+1);
 						bird.setRowInSheetID(r.nextInt(3));
-						int minW = this.getX() + this.getWidth() + bird.getSheet().getFrameWidth();
-						int maxW = 2 * dim.width;
+						int minW = this.getX() + WIDTH + bird.getSheet().getFrameWidth();
+						int maxW = 2 * WIDTH;
 						int minH = 50;
-						int maxH = dim.height - 320;
+						int maxH = HEIGHT - 320;
 						bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 						bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
 						bird.setDead(false);
@@ -310,14 +314,14 @@ public class AppFrame extends GameFrame {
 				// kao i za "levo" samo sto je pomeramo na random poziciju levo.
 				if (flyingBirds.get(bird).equals("right") && !bird.isDead()) {
 					bird.move(bird.getMovingSpeed(), 0);
-					if (bird.getPositionX() > this.getX() + this.getWidth()) {
+					if (bird.getPositionX() > this.getX() + WIDTH) {
 						bird.setMovingSpeed(r.nextInt(3) + 3);
 						// bird.setMovingSpeed(r.nextInt(1)+1);
 						bird.setRowInSheetID(r.nextInt(3));
-						int minW = -2 * dim.width;
+						int minW = -2 * WIDTH;
 						int maxW = this.getX() - bird.getSheet().getFrameWidth();
 						int minH = 50;
-						int maxH = dim.height - 320;
+						int maxH = HEIGHT - 320;
 						bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 						bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
 						bird.setDead(false);
@@ -331,14 +335,18 @@ public class AppFrame extends GameFrame {
 			int mouseX = getMouseX();
 			int mouseY = getMouseY();
 
-			if (mouseX >= getWidth() - 100) {
+			if (mouseX >= 800) {
 				offX += 10;
+				System.out.println("ACTIVE");
 			} else if (mouseX <= 100) {
 				offX -= 10;
-			} else if (mouseY >= getHeight() - 100) {
+				System.out.println("ACTIVE");
+			} else if (mouseY >= 500) {
 				offY += 10;
+				System.out.println("ACTIVE");
 			} else if (mouseY <= 100) {
 				offY -= 10;
+				System.out.println("ACTIVE");
 			}
 		}
 
