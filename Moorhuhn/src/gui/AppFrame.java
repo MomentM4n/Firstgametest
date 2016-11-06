@@ -44,7 +44,7 @@ public class AppFrame extends GameFrame {
 	private HashMap<MoorhunhBird, String> flyingBirds;
 	
 	public static final int WIDTH = 900;
-	public static final int HEIGHT = 600;
+	public static final int HEIGHT = 700;
 
 	private MoorhunhBirdSheet birdSheetLeft;
 	private MoorhunhBirdSheet birdSheetRight;
@@ -229,8 +229,8 @@ public class AppFrame extends GameFrame {
 				g.drawString(score + "", 210, 450);
 				g.drawString("Score:", 30, 450);
 			}
-			// g.drawRect(25, 215, 280, 60);
-			// g.drawRect(85, 285, 150, 60);
+			 g.drawRect(25, 255, 280, 60);
+			 g.drawRect(85, 335, 150, 60);
 
 		}
 		// Iscrtavanje Snipera na ekranu i pamcenje kordinata u modelu
@@ -341,13 +341,13 @@ public class AppFrame extends GameFrame {
 			} else if (mouseX <= 100) {
 				offX -= 10;
 				System.out.println("ACTIVE");
-			} else if (mouseY >= 500) {
+			}/* else if (mouseY >= 500) {
 				offY += 10;
 				System.out.println("ACTIVE");
 			} else if (mouseY <= 100) {
 				offY -= 10;
 				System.out.println("ACTIVE");
-			}
+			}*/
 		}
 
 		int[] curTime = getTime();
@@ -530,13 +530,13 @@ public class AppFrame extends GameFrame {
 
 		if (gameActive == false) {
 			if (button == GFMouseButton.Left) {
-				if (getMouseX() > 25 && getMouseX() < 305 && getMouseY() > 215 && getMouseY() < 275) {
+				if (getMouseX() > 25 && getMouseX() < 305 && getMouseY() > 255 && getMouseY() < 305) {
 					// System.out.println("new game");
 					gameActive = true;
 					startTime = System.currentTimeMillis();
 					restart();
 				}
-				if (getMouseX() > 85 && getMouseX() < 235 && getMouseY() > 285 && getMouseY() < 345) {
+				if (getMouseX() > 85 && getMouseX() < 235 && getMouseY() > 335 && getMouseY() < 395) {
 					// System.out.println("quite game");
 					getWindow().dispose();
 				}
