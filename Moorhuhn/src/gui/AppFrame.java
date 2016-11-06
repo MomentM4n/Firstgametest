@@ -164,8 +164,8 @@ public class AppFrame extends GameFrame {
 		if(x < 0) {
 			x = 0;
 		}
-		if(x > (backgroundImage.getWidth()-getWidth())){
-			x = (backgroundImage.getWidth()-getWidth());
+		if(x > (backgroundImage.getWidth()-getWidth() - 50)){
+			x = (backgroundImage.getWidth()-getWidth() - 50);
 		}
 		if(y < 0) {
 			y = 1;
@@ -213,8 +213,8 @@ public class AppFrame extends GameFrame {
 				bird.setMovingSpeed(8);
 				bird.move(0, bird.getMovingSpeed());
 				if(bird.getPositionY() > this.getY() + this.getHeight() && flyingBirds.get(bird).equals("left")){
-					bird.setMovingSpeed(r.nextInt(3)+3);
-					//bird.setMovingSpeed(r.nextInt(1)+1);
+					//bird.setMovingSpeed(r.nextInt(3)+3);
+					bird.setMovingSpeed(r.nextInt(1)+1);
 					bird.setRowInSheetID(r.nextInt(3));
 					int minW = this.getX() + this.getWidth() + bird.getSheet().getFrameWidth();
 					int maxW = 2*dim.width;
@@ -317,99 +317,110 @@ public class AppFrame extends GameFrame {
 	@Override
 	public void handleMouseDown(int x, int y, GFMouseButton button) {
 		// TODO Auto-generated method stub
-		if(button == GFMouseButton.Left){
-for (MoorhunhBird bird : flyingBirds.keySet()) {
-				
-				//Proveravamo za svaku pticurinu intersekciju tj. da li je pogodjena,
-				//ako jeste menjamo joj odgovarajuci sheet i postavljamo da je mrtva
-				if(flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 0 && sniper.contains(bird.getPositionX(),
-						bird.getPositionY(), bird.getSheet().getFrameWidth() - 90, bird.getSheet().getFrameHeight() - 85)){
-					System.out.println("Pogodili smo pticurinu levu, veliku");
-					bird.setBirdSheet(deadBirdSheet);
-					bird.setRowInSheetID(0);
-					bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
-					bird.setDead(true);
-					
+		if (button == GFMouseButton.Left) {
+			if (bullets.getCurrentNumberOfBullets() > 0) {
+				playSound(shootSound);
+				for (MoorhunhBird bird : flyingBirds.keySet()) {
+
+					// Proveravamo za svaku pticurinu intersekciju tj. da li je
+					// pogodjena,
+					// ako jeste menjamo joj odgovarajuci sheet i postavljamo da
+					// je mrtva
+					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 0
+							&& sniper.contains(bird.getPositionX(), bird.getPositionY(),
+									bird.getSheet().getFrameWidth() - 90, bird.getSheet().getFrameHeight() - 85)) {
+						System.out.println("Pogodili smo pticurinu levu, veliku");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(0);
+						bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
+						bird.setDead(true);
+
+					}
+
+					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 1
+							&& sniper.contains(bird.getPositionX() + 27, bird.getPositionY(),
+									bird.getSheet().getFrameWidth() - 103, bird.getSheet().getFrameHeight() - 85)) {
+						System.out.println("Pogodili smo pticurinu levu, srednju");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(1);
+						bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
+						bird.setDead(true);
+					}
+
+					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 2
+							&& sniper.contains(bird.getPositionX() + 40, bird.getPositionY() + 10,
+									bird.getSheet().getFrameWidth() - 120, bird.getSheet().getFrameHeight() - 92)) {
+						System.out.println("Pogodili smo pticurinu levu, malu");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(2);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+					}
+					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 3
+							&& sniper.contains(bird.getPositionX() + 43, bird.getPositionY() + 20,
+									bird.getSheet().getFrameWidth() - 137, bird.getSheet().getFrameHeight() - 115)) {
+						System.out.println("Pogodili smo pticurinu levu, najmanju");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(3);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+
+					}
+
+					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 0
+							&& sniper.contains(bird.getPositionX() + 57, bird.getPositionY(),
+									bird.getSheet().getFrameWidth() - 90, bird.getSheet().getFrameHeight() - 85)) {
+						System.out.println("Pogodili smo pticurinu desnu, veliku");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(0);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+					}
+
+					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 1
+							&& sniper.contains(bird.getPositionX() + 63, bird.getPositionY(),
+									bird.getSheet().getFrameWidth() - 90, bird.getSheet().getFrameHeight() - 85)) {
+						System.out.println("Pogodili smo pticurinu desnu, srednju");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(1);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+					}
+
+					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 2
+							&& sniper.contains(bird.getPositionX() + 69, bird.getPositionY() + 13,
+									bird.getSheet().getFrameWidth() - 113, bird.getSheet().getFrameHeight() - 92)) {
+						System.out.println("Pogodili smo pticurinu desnu, malu");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(2);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+					}
+
+					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 3
+							&& sniper.contains(bird.getPositionX() + 75, bird.getPositionY() + 20,
+									bird.getSheet().getFrameWidth() - 136, bird.getSheet().getFrameHeight() - 113)) {
+						System.out.println("Pogodili smo pticurinu desnu, najmanju");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(3);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+					}
 				}
-				
-				if(flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 1 && sniper.contains(bird.getPositionX()+27,
-						bird.getPositionY(), bird.getSheet().getFrameWidth() - 103 , bird.getSheet().getFrameHeight() - 85)){
-					System.out.println("Pogodili smo pticurinu levu, srednju");
-					bird.setBirdSheet(deadBirdSheet);
-					bird.setRowInSheetID(1);
-					bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
-					bird.setDead(true);
+				bullets.setCurrentNumberOfBullets(bullets.getCurrentNumberOfBullets() - 1);
+
+				if (button == GFMouseButton.Right) {
+					if (bullets.getCurrentNumberOfBullets() == 0) {
+						bullets.setCurrentNumberOfBullets(bullets.getMaxNumberOfBullets());
+						playSound(reloadSound);
+					}
 				}
-				
-				if(flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 2 && sniper.contains(bird.getPositionX()+40,
-						bird.getPositionY() + 10, bird.getSheet().getFrameWidth() - 120 , bird.getSheet().getFrameHeight() - 92)){
-					System.out.println("Pogodili smo pticurinu levu, malu");
-					bird.setBirdSheet(deadBirdSheet);
-					bird.setRowInSheetID(2);
-					bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-					bird.setDead(true);
-				}
-				if(flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 3 && sniper.contains(bird.getPositionX()+43,
-						bird.getPositionY() + 20, bird.getSheet().getFrameWidth() - 137 , bird.getSheet().getFrameHeight() - 115)){
-					System.out.println("Pogodili smo pticurinu levu, najmanju");
-					bird.setBirdSheet(deadBirdSheet);
-					bird.setRowInSheetID(3);
-					bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-					bird.setDead(true);
-					
-				}
-				
-				if(flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 0 && sniper.contains(bird.getPositionX()+57,
-						bird.getPositionY(), bird.getSheet().getFrameWidth() - 90 , bird.getSheet().getFrameHeight() - 85)){
-					System.out.println("Pogodili smo pticurinu desnu, veliku");
-					bird.setBirdSheet(deadBirdSheet);
-					bird.setRowInSheetID(0);
-					bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-					bird.setDead(true);
-				}
-				
-				if(flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 1 && sniper.contains(bird.getPositionX()+63,
-						bird.getPositionY(), bird.getSheet().getFrameWidth() - 90 , bird.getSheet().getFrameHeight() - 85)){
-					System.out.println("Pogodili smo pticurinu desnu, srednju");
-					bird.setBirdSheet(deadBirdSheet);
-					bird.setRowInSheetID(1);
-					bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-					bird.setDead(true);
-				}
-				
-				if(flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 2 && sniper.contains(bird.getPositionX()+69,
-						bird.getPositionY() + 13, bird.getSheet().getFrameWidth() - 113 , bird.getSheet().getFrameHeight() - 92)){
-					System.out.println("Pogodili smo pticurinu desnu, malu");
-					bird.setBirdSheet(deadBirdSheet);
-					bird.setRowInSheetID(2);
-					bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-					bird.setDead(true);
-				}
-				
-				if(flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 3 && sniper.contains(bird.getPositionX()+75,
-						bird.getPositionY() + 20, bird.getSheet().getFrameWidth() - 136 , bird.getSheet().getFrameHeight() - 113)){
-					System.out.println("Pogodili smo pticurinu desnu, najmanju");
-					bird.setBirdSheet(deadBirdSheet);
-					bird.setRowInSheetID(3);
-					bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-					bird.setDead(true);
-				}
+			} else {
+				playSound(shootSound);
 			}
-			   bullets.setCurrentNumberOfBullets(bullets.getCurrentNumberOfBullets()-1);
-			   if(bullets.getCurrentNumberOfBullets() == 0) {
-				   playSound(emptySound);
-			   }else{
-				   playSound(shootSound); 
-			   }
-			  }
-		if(button == GFMouseButton.Right) {
-			if(bullets.getCurrentNumberOfBullets() == 0){
-				bullets.setCurrentNumberOfBullets(bullets.getMaxNumberOfBullets());
-				playSound(reloadSound);
-			}
+
 		}
 	}
-	
 
 	@Override
 	public void handleMouseUp(int x, int y, GFMouseButton button) {
