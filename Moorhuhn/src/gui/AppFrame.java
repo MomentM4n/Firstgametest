@@ -50,10 +50,16 @@ public class AppFrame extends GameFrame {
 	private int offX;
 	private int offY;
 	
+	private AudioClip shootSound;
+	private AudioClip emptySound;
+	private AudioClip reloadSound;
+	
+	
+	
 	public AppFrame() {
 		
 		//Postavljamo prozor aplikacije na sredinu ekrana = NEUSPESNO
-		super("RAF Game",dim.width - dim.width/2, dim.height - 500);
+		super("RAF Game",900, 600);
 		//super("RAF Game",800, 600);
 		setHighQuality(true);
 		System.out.println(this.getX());
@@ -85,7 +91,9 @@ public class AppFrame extends GameFrame {
 		backgroundImage = Util.loadImage("pictures/background.jpg");
        // BufferedImage im = Util.loadImage("pictures/final.png");
 		sniperImage = Util.loadImage("pictures/sniper.png");
-		
+		shootSound = Applet.newAudioClip(getClass().getResource("/sounds/shootsound.wav"));
+		reloadSound = Applet.newAudioClip(getClass().getResource("/sounds/reloadsound.wav"));
+		emptySound = Applet.newAudioClip(getClass().getResource("/sounds/emptysound.wav"));
 	}
 	
 	private void centerFrame() {
@@ -256,9 +264,7 @@ public class AppFrame extends GameFrame {
 		}
 	}
 	
-	public void playSound(String path) {
-		URL url = getClass().getResource(path);    
-		AudioClip clip = Applet.newAudioClip(url);
+	public void playSound(AudioClip clip) {
 		clip.play();
 	}
 
@@ -287,15 +293,15 @@ public class AppFrame extends GameFrame {
 			   }
 			   bullets.setCurrentNumberOfBullets(bullets.getCurrentNumberOfBullets()-1);
 			   if(bullets.getCurrentNumberOfBullets() == 0) {
-				   playSound("/sounds/emptysound.wav");
+				   playSound(emptySound);
 			   }else{
-				   playSound("/sounds/shootsound.wav"); 
+				   playSound(shootSound); 
 			   }
 			  }
 		if(button == GFMouseButton.Right) {
 			if(bullets.getCurrentNumberOfBullets() == 0){
 				bullets.setCurrentNumberOfBullets(bullets.getMaxNumberOfBullets());
-				playSound("/sounds/reloadsound.wav");
+				playSound(reloadSound);
 			}
 		}
 	}
@@ -319,7 +325,7 @@ public class AppFrame extends GameFrame {
 		if(keyCode == KeyEvent.VK_SPACE) {
 			if(bullets.getCurrentNumberOfBullets() == 0){
 				bullets.setCurrentNumberOfBullets(bullets.getMaxNumberOfBullets());
-				playSound("/sounds/reloadsound.wav");
+				playSound(reloadSound);
 			}
 		}
 	}
