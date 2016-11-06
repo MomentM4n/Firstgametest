@@ -77,6 +77,21 @@ public class MoorhunhBird {
 			frameInterval = i;
 	}
 	
+	public void setAnimationInterval(){
+		switch (movingSpeed) {
+		case 1:
+			frameInterval = 6;
+			break;
+		case 2 :
+			frameInterval = 4;
+			break;
+		case 3 :
+			frameInterval = 2;
+		
+			break;
+		}
+	}
+	
 	public void setPosition(int x, int y){
 		posX = x;
 		posY = y;

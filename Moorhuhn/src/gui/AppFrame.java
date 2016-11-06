@@ -30,6 +30,8 @@ import graph_components.Bullets;
 import graph_components.Feathers;
 import graph_components.MoorhunhBird;
 import graph_components.MoorhunhBirdSheet;
+import graph_components.NormalSlideMoorhunhBird;
+import graph_components.SlideMoorhunhBird;
 import graph_components.Sniper;
 import rafgfxlib.GameFrame;
 import rafgfxlib.Util;
@@ -42,10 +44,12 @@ public class AppFrame extends GameFrame {
 	// VALUE
 	// predstavlja smer letenja ptica ("left" or "right").
 	private HashMap<MoorhunhBird, String> flyingBirds;
-	
+	private SlideMoorhunhBird normalBird;
+	private SlideMoorhunhBird psychoBird;
+
 	public static final int WIDTH = 900;
 	public static final int HEIGHT = 700;
-
+	
 	private MoorhunhBirdSheet birdSheetLeft;
 	private MoorhunhBirdSheet birdSheetRight;
 	private MoorhunhBirdSheet deadBirdSheet;
@@ -53,6 +57,7 @@ public class AppFrame extends GameFrame {
 	private BufferedImage backgroundImage;
 	private BufferedImage sniperImage;
 	private BufferedImage startCover;
+	
 
 	private Sniper sniper;
 	Bullets bullets;
@@ -65,11 +70,14 @@ public class AppFrame extends GameFrame {
 	private AudioClip emptySound;
 	private AudioClip reloadSound;
 	private AudioClip deadSound;
-
+	
 	private long startTime;
 	private long playTime;
 	private int currentTimeMinutes;
 	private int currentTimeSeconds;
+	
+//	private int birdDuration = 3000;
+//	private long startTimeBird = 0;
 
 	private int score;
 	
@@ -81,9 +89,9 @@ public class AppFrame extends GameFrame {
 		super("RAF Game", WIDTH, HEIGHT);
 		// super("RAF Game",800, 600);
 		setHighQuality(true);
-		// System.out.println(this.getX());
+		//System.out.println(this.getX());
 		// centerFrame();
-		// System.out.println(this.getX());
+		//System.out.println(this.getX());
 
 		initComponents();
 
@@ -143,9 +151,13 @@ public class AppFrame extends GameFrame {
 		deadBirdSheet = new MoorhunhBirdSheet("pictures/deadBird.png", 1, 4);
 		birdSheetRight.setOffsets(32, 64);
 
-		// initBirds
-		flyingBirds = new HashMap<>();
 		Random r = new Random();
+		// initBirds
+		normalBird = new NormalSlideMoorhunhBird("pictures/NormalBird.png", this.getX() + r.nextInt(this.getWidth() - this.getX()),
+				(this.getY() + this.getHeight() + 200) + r.nextInt(1000 - (this.getY() + this.getHeight() + 200)));
+		
+		flyingBirds = new HashMap<>();
+		
 		// Konstruisemo 5 ptica koje lete na levu stranu
 		for (int i = 0; i < 5; i++) {
 			MoorhunhBird bird = new MoorhunhBird(birdSheetLeft, r.nextInt(2000), r.nextInt(HEIGHT - 200));
@@ -174,7 +186,7 @@ public class AppFrame extends GameFrame {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void render(Graphics2D g, int sw, int sh) {
 		g.setFont(new Font("Gulim", Font.BOLD, 30));
@@ -206,10 +218,14 @@ public class AppFrame extends GameFrame {
 			g.drawImage(img, 0, 0, this);
 			// System.out.println(x + " " + y);
 
+			//Iscrtavanje "Normalne" ptice
+			((NormalSlideMoorhunhBird)normalBird).draw(g, ((NormalSlideMoorhunhBird)normalBird).getPosX()-32, ((NormalSlideMoorhunhBird)normalBird).getPosY()-64);
 			// Iscrtavanje ptica
 			for (MoorhunhBird moorhunhBird : flyingBirds.keySet()) {
 				moorhunhBird.draw(g);
 			}
+			
+			
 
 			for (int i = 0; i < bullets.getCurrentNumberOfBullets(); i++) {
 				g.drawImage(bullets.getBulletImg(), WIDTH - 50 - i * 30, getHeight() - 100, this);
@@ -248,128 +264,127 @@ public class AppFrame extends GameFrame {
 		if (gameActive == true) {
 			Random r = new Random();
 			feathers.update();
-			for (MoorhunhBird bird : flyingBirds.keySet()) {
+			
 
-				// Proveravamo da li je ptica mrtva, ako jeste , proveravamo da
-				// li
-				// je izasla
-				// sa donjeg dela ekrana ako jeste onda je vracamo u zivot i
-				// postavljamo na rand poziciju
-				if (bird.isDead()) {
-					bird.setMovingSpeed(8);
-					bird.move(0, bird.getMovingSpeed());
-					if (bird.getPositionY() > this.getY() + this.getHeight() && flyingBirds.get(bird).equals("left")) {
-						// bird.setMovingSpeed(r.nextInt(3)+3);
-						bird.setMovingSpeed(r.nextInt(1) + 1);
-						bird.setRowInSheetID(r.nextInt(3));
-						int minW = this.getX() + WIDTH + bird.getSheet().getFrameWidth();
-						int maxW = 2 * WIDTH;
-						int minH = 50;
-						int maxH = HEIGHT - 320;
-						bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
-						bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
-						bird.setDead(false);
-						bird.setBirdSheet(birdSheetLeft);
-					}
-					if (bird.getPositionY() > this.getY() + this.getHeight() && flyingBirds.get(bird).equals("right")) {
-						bird.setMovingSpeed(r.nextInt(3) + 3);
-						// bird.setMovingSpeed(r.nextInt(1)+1);
-						bird.setRowInSheetID(r.nextInt(3));
-						int minW = -2 * WIDTH;
-						int maxW = this.getX() - bird.getSheet().getFrameWidth();
-						int minH = 50;
-						int maxH = HEIGHT - 320;
-						bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
-						bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
-						bird.setDead(false);
-						bird.setBirdSheet(birdSheetRight);
-					}
+		
+		for (MoorhunhBird bird : flyingBirds.keySet()) {
 
+			// Proveravamo da li je ptica mrtva, ako jeste , proveravamo da li
+			// je izasla
+			// sa donjeg dela ekrana ako jeste onda je vracamo u zivot i
+			// postavljamo na rand poziciju
+			if (bird.isDead()) {
+				bird.setMovingSpeed(8);
+				bird.move(0, bird.getMovingSpeed());
+				if (bird.getPositionY() > this.getY() + this.getHeight() && flyingBirds.get(bird).equals("left")) {
+					 bird.setMovingSpeed(r.nextInt(3)+3);
+					//bird.setMovingSpeed(r.nextInt(2) + 2);
+					bird.setRowInSheetID(r.nextInt(3));
+					int minW = this.getX() + this.getWidth() + bird.getSheet().getFrameWidth();
+					int maxW = 2 * dim.width;
+					int minH = 50;
+					int maxH = dim.height - 320;
+					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
+					bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
+					bird.setDead(false);
+					bird.setBirdSheet(birdSheetLeft);
+				}
+				if (bird.getPositionY() > this.getY() + this.getHeight() && flyingBirds.get(bird).equals("right")) {
+					bird.setMovingSpeed(r.nextInt(3) + 3);
+					// bird.setMovingSpeed(r.nextInt(2)+1);
+					bird.setRowInSheetID(r.nextInt(3));
+					int minW = -2 * dim.width;
+					int maxW = this.getX() - bird.getSheet().getFrameWidth();
+					int minH = 50;
+					int maxH = dim.height - 320;
+					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
+					bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
+					bird.setDead(false);
+					bird.setBirdSheet(birdSheetRight);
 				}
 
-				// Proveravamo da li ptica leti u levo, ako da, pomeramo je u
-				// levo i
-				// proveravamo da li izlazi iz sa frame-a u levo, ako je izasla,
-				// vracamo je
-				// na random poziciju u desno sa random velicinom i random
-				// brzinom
-				// kretanja(brzinom pokreta krila).
-				if (flyingBirds.get(bird).equals("left") && !bird.isDead()) {
-					bird.move(-(bird.getMovingSpeed()), 0);
-					if (bird.getPositionX() + bird.getSheet().getFrameWidth() < this.getX()) {
-						bird.setMovingSpeed(r.nextInt(3) + 3);
-						// bird.setMovingSpeed(r.nextInt(1)+1);
-						bird.setRowInSheetID(r.nextInt(3));
-						int minW = this.getX() + WIDTH + bird.getSheet().getFrameWidth();
-						int maxW = 2 * WIDTH;
-						int minH = 50;
-						int maxH = HEIGHT - 320;
-						bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
-						bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
-						bird.setDead(false);
-					}
-				}
-				// ako ptica ne lete u lefo (leti u desno) pomeramo je u desno i
-				// radimo isto
-				// kao i za "levo" samo sto je pomeramo na random poziciju levo.
-				if (flyingBirds.get(bird).equals("right") && !bird.isDead()) {
-					bird.move(bird.getMovingSpeed(), 0);
-					if (bird.getPositionX() > this.getX() + WIDTH) {
-						bird.setMovingSpeed(r.nextInt(3) + 3);
-						// bird.setMovingSpeed(r.nextInt(1)+1);
-						bird.setRowInSheetID(r.nextInt(3));
-						int minW = -2 * WIDTH;
-						int maxW = this.getX() - bird.getSheet().getFrameWidth();
-						int minH = 50;
-						int maxH = HEIGHT - 320;
-						bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
-						bird.setAnimationInterval((5 % bird.getMovingSpeed()) + 1);
-						bird.setDead(false);
-					}
-
-				}
-
-				bird.update();
 			}
 
-			int mouseX = getMouseX();
-			int mouseY = getMouseY();
+			// Proveravamo da li ptica leti u levo, ako da, pomeramo je u levo i
+			// proveravamo da li izlazi iz sa frame-a u levo, ako je izasla,
+			// vracamo je
+			// na random poziciju u desno sa random velicinom i random brzinom
+			// kretanja(brzinom pokreta krila).
+			if (flyingBirds.get(bird).equals("left") && !bird.isDead()) {
+				bird.move(-(bird.getMovingSpeed()), 0);
+				if (bird.getPositionX() + bird.getSheet().getFrameWidth() < this.getX()) {
+					//bird.setMovingSpeed(r.nextInt(3) + 3);
+					 bird.setMovingSpeed(r.nextInt(2)+1);
+					bird.setRowInSheetID(r.nextInt(3));
+					int minW = this.getX() + this.getWidth() + bird.getSheet().getFrameWidth();
+					int maxW = 2 * dim.width;
+					int minH = 50;
+					int maxH = dim.height - 320;
+					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
+					bird.setAnimationInterval();
+					bird.setDead(false);
+				}
+			}
+			// ako ptica ne lete u lefo (leti u desno) pomeramo je u desno i
+			// radimo isto
+			// kao i za "levo" samo sto je pomeramo na random poziciju levo.
+			if (flyingBirds.get(bird).equals("right") && !bird.isDead()) {
+				bird.move(bird.getMovingSpeed(), 0);
+				if (bird.getPositionX() > this.getX() + this.getWidth()) {
+					//bird.setMovingSpeed(r.nextInt(3) + 3);
+					bird.setMovingSpeed(r.nextInt(2)+1);
+					bird.setRowInSheetID(r.nextInt(3));
+					int minW = -2 * dim.width;
+					int maxW = this.getX() - bird.getSheet().getFrameWidth();
+					int minH = 50;
+					int maxH = dim.height - 320;
+					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
+					bird.setAnimationInterval();
+					bird.setDead(false);
+				}
 
-			if (mouseX >= 800) {
-				offX += 10;
-				System.out.println("ACTIVE");
-			} else if (mouseX <= 100) {
-				offX -= 10;
-				System.out.println("ACTIVE");
-			}/* else if (mouseY >= 500) {
-				offY += 10;
-				System.out.println("ACTIVE");
-			} else if (mouseY <= 100) {
-				offY -= 10;
-				System.out.println("ACTIVE");
-			}*/
+			}
+
+			bird.update();
 		}
+		
+		//Pozivamo update za normalnu kokosku
+		((NormalSlideMoorhunhBird)normalBird).update(this);
+		
+		int mouseX = getMouseX();
+		int mouseY = getMouseY();
 
+		if (mouseX >= getWidth() - 100) {
+			offX += 10;
+		} else if (mouseX <= 100) {
+			offX -= 10;
+		} else if (mouseY >= getHeight() - 100) {
+			offY += 10;
+		} else if (mouseY <= 100) {
+			offY -= 10;
+		}
+			}
 		int[] curTime = getTime();
 		currentTimeMinutes = curTime[1];
 		currentTimeSeconds = curTime[2];
-		// System.out.println(curTime[0] + " : " + curTime[1] + " : " +
-		// curTime[2] + " : " + curTime[3]);
+        //System.out.println(curTime[0] + " : " + curTime[1] + " : " + curTime[2] + " : " + curTime[3]);
 		if (curTime[1] <= 0 && curTime[2] <= 0) {
 			gameActive = false;
 		}
+			
+	
 	}
+	public int[] getTime()
+    {
+        long milliTime = playTime - (System.currentTimeMillis() - this.startTime);
+        int[] out = new int[]{0, 0, 0, 0};
+        out[0] = (int)(milliTime / 3600000      );
+        out[1] = (int)(milliTime / 60000        ) % 60;
+        out[2] = (int)(milliTime / 1000         ) % 60;
+        out[3] = (int)(milliTime)                 % 1000;
 
-	public int[] getTime() {
-		long milliTime = playTime - (System.currentTimeMillis() - this.startTime);
-		int[] out = new int[] { 0, 0, 0, 0 };
-		out[0] = (int) (milliTime / 3600000);
-		out[1] = (int) (milliTime / 60000) % 60;
-		out[2] = (int) (milliTime / 1000) % 60;
-		out[3] = (int) (milliTime) % 1000;
-
-		return out;
-	}
+        return out;
+    }
 
 	public void music() {
 		URL url = Util.class.getClassLoader().getResource("sounds/bgsound.wav");
@@ -421,97 +436,96 @@ public class AppFrame extends GameFrame {
 							feathers.genEx(x, y, 10.0f, 300, 50);
 						}
 
-						if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 1
-								&& sniper.contains(bird.getPositionX() + 27, bird.getPositionY(),
-										bird.getSheet().getFrameWidth() - 103, bird.getSheet().getFrameHeight() - 85)) {
-							System.out.println("Pogodili smo pticurinu levu, srednju");
-							bird.setBirdSheet(deadBirdSheet);
-							bird.setRowInSheetID(1);
-							bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
-							bird.setDead(true);
-							playSound(deadSound);
-							score += 10;
-							feathers.genEx(x, y, 10.0f, 300, 50);
-						}
+					}
 
-						if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 2
-								&& sniper.contains(bird.getPositionX() + 40, bird.getPositionY() + 10,
-										bird.getSheet().getFrameWidth() - 120, bird.getSheet().getFrameHeight() - 92)) {
-							System.out.println("Pogodili smo pticurinu levu, malu");
-							bird.setBirdSheet(deadBirdSheet);
-							bird.setRowInSheetID(2);
-							bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-							bird.setDead(true);
-							playSound(deadSound);
-							score += 15;
-							feathers.genEx(x, y, 10.0f, 300, 50);
-						}
-						if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 3
-								&& sniper.contains(bird.getPositionX() + 43, bird.getPositionY() + 20,
-										bird.getSheet().getFrameWidth() - 137,
-										bird.getSheet().getFrameHeight() - 115)) {
-							System.out.println("Pogodili smo pticurinu levu, najmanju");
-							bird.setBirdSheet(deadBirdSheet);
-							bird.setRowInSheetID(3);
-							bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-							bird.setDead(true);
-							playSound(deadSound);
-							score += 20;
-							feathers.genEx(x, y, 10.0f, 300, 50);
-						}
+					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 1
+							&& sniper.contains(bird.getPositionX() + 27, bird.getPositionY(),
+									bird.getSheet().getFrameWidth() - 103, bird.getSheet().getFrameHeight() - 85)) {
+						System.out.println("Pogodili smo pticurinu levu, srednju");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(1);
+						bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
+						bird.setDead(true);
+						playSound(deadSound);
+						score += 20;
+						feathers.genEx(x, y, 10.0f, 300, 50);
+					}
 
-						if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 0
-								&& sniper.contains(bird.getPositionX() + 57, bird.getPositionY(),
-										bird.getSheet().getFrameWidth() - 90, bird.getSheet().getFrameHeight() - 85)) {
-							System.out.println("Pogodili smo pticurinu desnu, veliku");
-							bird.setBirdSheet(deadBirdSheet);
-							bird.setRowInSheetID(0);
-							bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-							bird.setDead(true);
-							playSound(deadSound);
-							score += 5;
-							feathers.genEx(x, y, 10.0f, 300, 50);
-						}
+					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 2
+							&& sniper.contains(bird.getPositionX() + 40, bird.getPositionY() + 10,
+									bird.getSheet().getFrameWidth() - 120, bird.getSheet().getFrameHeight() - 92)) {
+						System.out.println("Pogodili smo pticurinu levu, malu");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(2);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+						playSound(deadSound);
+						score += 5;
+						feathers.genEx(x, y, 10.0f, 300, 50);
+					}
+					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 3
+							&& sniper.contains(bird.getPositionX() + 43, bird.getPositionY() + 20,
+									bird.getSheet().getFrameWidth() - 137, bird.getSheet().getFrameHeight() - 115)) {
+						System.out.println("Pogodili smo pticurinu levu, najmanju");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(3);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+						playSound(deadSound);
+						score += 5;
+						feathers.genEx(x, y, 10.0f, 300, 50);
+					}
 
-						if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 1
-								&& sniper.contains(bird.getPositionX() + 63, bird.getPositionY(),
-										bird.getSheet().getFrameWidth() - 90, bird.getSheet().getFrameHeight() - 85)) {
-							System.out.println("Pogodili smo pticurinu desnu, srednju");
-							bird.setBirdSheet(deadBirdSheet);
-							bird.setRowInSheetID(1);
-							bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-							bird.setDead(true);
-							playSound(deadSound);
-							score += 10;
-							feathers.genEx(x, y, 10.0f, 300, 50);
-						}
+					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 0
+							&& sniper.contains(bird.getPositionX() + 57, bird.getPositionY(),
+									bird.getSheet().getFrameWidth() - 90, bird.getSheet().getFrameHeight() - 85)) {
+						System.out.println("Pogodili smo pticurinu desnu, veliku");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(0);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+						playSound(deadSound);
+						score += 5;
+						feathers.genEx(x, y, 10.0f, 300, 50);
+					}
 
-						if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 2
-								&& sniper.contains(bird.getPositionX() + 69, bird.getPositionY() + 13,
-										bird.getSheet().getFrameWidth() - 113, bird.getSheet().getFrameHeight() - 92)) {
-							System.out.println("Pogodili smo pticurinu desnu, malu");
-							bird.setBirdSheet(deadBirdSheet);
-							bird.setRowInSheetID(2);
-							bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-							bird.setDead(true);
-							playSound(deadSound);
-							score += 15;
-							feathers.genEx(x, y, 10.0f, 300, 50);
-						}
+					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 1
+							&& sniper.contains(bird.getPositionX() + 63, bird.getPositionY(),
+									bird.getSheet().getFrameWidth() - 90, bird.getSheet().getFrameHeight() - 85)) {
+						System.out.println("Pogodili smo pticurinu desnu, srednju");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(1);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+						playSound(deadSound);
+						score += 5;
+						feathers.genEx(x, y, 10.0f, 300, 50);
+					}
 
-						if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 3
-								&& sniper.contains(bird.getPositionX() + 75, bird.getPositionY() + 20,
-										bird.getSheet().getFrameWidth() - 136,
-										bird.getSheet().getFrameHeight() - 113)) {
-							System.out.println("Pogodili smo pticurinu desnu, najmanju");
-							bird.setBirdSheet(deadBirdSheet);
-							bird.setRowInSheetID(3);
-							bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
-							bird.setDead(true);
-							playSound(deadSound);
-							score += 20;
-							feathers.genEx(x, y, 10.0f, 300, 50);
-						}
+					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 2
+							&& sniper.contains(bird.getPositionX() + 69, bird.getPositionY() + 13,
+									bird.getSheet().getFrameWidth() - 113, bird.getSheet().getFrameHeight() - 92)) {
+						System.out.println("Pogodili smo pticurinu desnu, malu");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(2);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+						playSound(deadSound);
+						score += 5;
+						feathers.genEx(x, y, 10.0f, 300, 50);
+					}
+
+					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 3
+							&& sniper.contains(bird.getPositionX() + 75, bird.getPositionY() + 20,
+									bird.getSheet().getFrameWidth() - 136, bird.getSheet().getFrameHeight() - 113)) {
+						System.out.println("Pogodili smo pticurinu desnu, najmanju");
+						bird.setBirdSheet(deadBirdSheet);
+						bird.setRowInSheetID(3);
+						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
+						bird.setDead(true);
+						playSound(deadSound);
+						score += 5;
+						feathers.genEx(x, y, 10.0f, 300, 50);
 					}
 				}
 				if (gameActive == true)
