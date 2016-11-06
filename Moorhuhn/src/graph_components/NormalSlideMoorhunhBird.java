@@ -23,12 +23,16 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 	private boolean psycho = false;
 	private int movingSpeed = 3;
 	
+	private ScoreNumbers score;
+	
 	public NormalSlideMoorhunhBird(String nameOfImage, int PosX, int PosY) {
 		image = Util.loadImage(nameOfImage);
 		this.PosX = PosX;
 		this.PosY = PosY;
 		Random r = new Random();
 		movingSpeed = r.nextInt(3)+5;
+		MoorhunhBirdSheet sheetScore = new MoorhunhBirdSheet("pictures/score.png", 1, 10);	
+		score = new ScoreNumbers(sheetScore, 0, 0);
 		
 	}
 	
@@ -135,5 +139,8 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 		g.drawImage(image, posX, posY, null);
 		
 	}
+	
+	public ScoreNumbers getScore() {return score; }
+	public void setScore(ScoreNumbers score) {this.score = score; }
 	
 }

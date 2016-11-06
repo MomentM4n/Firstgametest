@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -31,6 +32,7 @@ import graph_components.Feathers;
 import graph_components.MoorhunhBird;
 import graph_components.MoorhunhBirdSheet;
 import graph_components.NormalSlideMoorhunhBird;
+import graph_components.ScoreNumbers;
 import graph_components.SlideMoorhunhBird;
 import graph_components.Sniper;
 import rafgfxlib.GameFrame;
@@ -56,6 +58,7 @@ public class AppFrame extends GameFrame {
 	private MoorhunhBirdSheet invertBirdSheetRight;
 	private MoorhunhBirdSheet invertBirdSheetLeft;
 	private MoorhunhBirdSheet invertDeadBirdSheet;
+	private MoorhunhBirdSheet sheetForScoreNumbers;
 
 	private BufferedImage backgroundImage;
 	private BufferedImage sniperImage;
@@ -130,8 +133,9 @@ public class AppFrame extends GameFrame {
 		playTime = 60000;
 		score = 0;
 		feathers = new Feathers();
-		durationEffect = 10000;
+		durationEffect = 5000;
 		effectActive = false;
+		
 	}
 
 	private void centerFrame() {
@@ -176,15 +180,15 @@ public class AppFrame extends GameFrame {
 		
 		flyingBirds = new HashMap<>();
 		
-		// Konstruisemo 5 ptica koje lete na levu stranu
-		for (int i = 0; i < 5; i++) {
+		// Konstruisemo 4 ptica koje lete na levu stranu
+		for (int i = 0; i < 4; i++) {
 			MoorhunhBird bird = new MoorhunhBird(birdSheetLeft, r.nextInt(2000), r.nextInt(HEIGHT - 200));
 			bird.setAnimationInterval();
 			flyingBirds.put(bird, "left");
 
 		}
-		// Konstruisemo 5 ptica koje lete na desnu stranu
-		for (int i = 0; i < 5; i++) {
+		// Konstruisemo 3 ptica koje lete na desnu stranu
+		for (int i = 0; i < 3; i++) {
 			MoorhunhBird bird = new MoorhunhBird(birdSheetRight, r.nextInt(2000), r.nextInt(HEIGHT - 200));
 			bird.setAnimationInterval();
 			flyingBirds.put(bird, "right");
@@ -244,13 +248,15 @@ public class AppFrame extends GameFrame {
 
 			//Iscrtavanje "Normalne" ptice
 			((NormalSlideMoorhunhBird)normalBird).draw(g, ((NormalSlideMoorhunhBird)normalBird).getPosX()-32, ((NormalSlideMoorhunhBird)normalBird).getPosY()-64);
+			((NormalSlideMoorhunhBird)normalBird).getScore().draw(g);
 			// Iscrtavanje ptica
 			for (MoorhunhBird moorhunhBird : flyingBirds.keySet()) {
 				moorhunhBird.draw(g);
+				moorhunhBird.getScore().draw(g);
 			}
 			
 			
-
+			//BULLETS
 			for (int i = 0; i < bullets.getCurrentNumberOfBullets(); i++) {
 				g.drawImage(bullets.getBulletImg(), WIDTH - 50 - i * 30, getHeight() - 100, this);
 			}
@@ -311,12 +317,8 @@ public class AppFrame extends GameFrame {
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 					bird.setAnimationInterval();
 					bird.setDead(false);
-					int p = r.nextInt(3);
+					int p = r.nextInt(4);
 					if(p == 1){
-						System.out.println("desio se invert");
-						//bird.setBirdSheet(new MoorhunhBirdSheet(birdSheetLeft));
-						//birdSheetRight.setOffsets(32, 64);
-						//bird.getSheet().invertSheet();
 						bird.setBirdSheet(invertBirdSheetLeft);
 					}
 					else{
@@ -334,13 +336,8 @@ public class AppFrame extends GameFrame {
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 					bird.setAnimationInterval();
 					bird.setDead(false);
-					int p = r.nextInt(3);
-					
+					int p = r.nextInt(4);
 					if(p == 1){
-						System.out.println("desio se invert");
-						//bird.setBirdSheet(new MoorhunhBirdSheet(birdSheetLeft));
-						//birdSheetRight.setOffsets(32, 64);
-						//bird.getSheet().invertSheet();
 						bird.setBirdSheet(invertBirdSheetRight);
 					}
 					else{
@@ -370,13 +367,10 @@ public class AppFrame extends GameFrame {
 					bird.setAnimationInterval();
 					bird.setDead(false);
 					//Stvaranje random invert kokoske
-					int p = r.nextInt(3);
+					int p = r.nextInt(4);
 					
 					if(p == 1){
-						System.out.println("desio se invert");
-						//bird.setBirdSheet(new MoorhunhBirdSheet(birdSheetLeft));
-						//birdSheetRight.setOffsets(32, 64);
-						//bird.getSheet().invertSheet();
+						
 						bird.setBirdSheet(invertBirdSheetLeft);
 					}
 					else{
@@ -391,9 +385,6 @@ public class AppFrame extends GameFrame {
 				bird.move(bird.getMovingSpeed(), 0);
 				if (bird.getPositionX() > this.getX() + this.getWidth()) {
 					//bird.setMovingSpeed(r.nextInt(3) + 3);
-					//Stvaranje random invert kokoske
-					int p = r.nextInt(3);
-					
 					bird.setMovingSpeed(r.nextInt(3)+1);
 					bird.setRowInSheetID(r.nextInt(3));
 					int minW = -2 * WIDTH;
@@ -403,12 +394,9 @@ public class AppFrame extends GameFrame {
 					bird.setPosition(minW + r.nextInt(maxW - minW), minH + r.nextInt(maxH - minH));
 					bird.setAnimationInterval();
 					bird.setDead(false);
+					//Stvaranje random invert kokoske
+					int p = r.nextInt(4);
 					if(p == 1){
-						System.out.println("Desio se invert");
-						//MoorhunhBirdSheet b = new MoorhunhBirdSheet(birdSheetRight);
-						//bird.setBirdSheet(b);
-						//birdSheetRight.setOffsets(32, 64);
-						//bird.getSheet().invertSheet();
 						bird.setBirdSheet(invertBirdSheetRight);
 					}
 					else{
@@ -417,12 +405,15 @@ public class AppFrame extends GameFrame {
 				}
 
 			}
-
+			
+			
+			bird.getScore().move(0, -(bird.getScore().getMovingSpeed()));
 			bird.update();
 		}
 		
 		//Pozivamo update za normalnu kokosku
 		((NormalSlideMoorhunhBird)normalBird).update(this);
+		((NormalSlideMoorhunhBird)normalBird).getScore().move(0, -(((NormalSlideMoorhunhBird)normalBird).getScore().getMovingSpeed()));
 		
 		int mouseX = getMouseX();
 		int mouseY = getMouseY();
@@ -521,8 +512,13 @@ public class AppFrame extends GameFrame {
 								score -= 5;
 								startEffect = System.currentTimeMillis();
 								effectActive = true;
+								(bird.getScore()).setRowInSheetID(5);
+								(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
+								
 							}else{
 							score += 5;
+							(bird.getScore()).setRowInSheetID(0);
+							(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 							}
 						}
 
@@ -547,8 +543,12 @@ public class AppFrame extends GameFrame {
 							score -= 10;
 							startEffect = System.currentTimeMillis();
 							effectActive = true;
+							(bird.getScore()).setRowInSheetID(6);
+							(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}else{
 						score += 10;
+						(bird.getScore()).setRowInSheetID(1);
+						(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}
 					}
 
@@ -571,8 +571,12 @@ public class AppFrame extends GameFrame {
 							score -= 15;
 							startEffect = System.currentTimeMillis();
 							effectActive = true;
+							(bird.getScore()).setRowInSheetID(7);
+							(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}else{
 						score += 15;
+						(bird.getScore()).setRowInSheetID(2);
+						(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}
 					}
 					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 3
@@ -594,8 +598,12 @@ public class AppFrame extends GameFrame {
 							score -= 20;
 							startEffect = System.currentTimeMillis();
 							effectActive = true;
+							(bird.getScore()).setRowInSheetID(8);
+							(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}else{
 						score += 20;
+						(bird.getScore()).setRowInSheetID(3);
+						(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}
 					}
 
@@ -618,8 +626,12 @@ public class AppFrame extends GameFrame {
 							score -= 5;
 							startEffect = System.currentTimeMillis();
 							effectActive = true;
+							(bird.getScore()).setRowInSheetID(5);
+							(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}else{
 						score += 5;
+						(bird.getScore()).setRowInSheetID(0);
+						(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}
 					}
 
@@ -642,8 +654,12 @@ public class AppFrame extends GameFrame {
 							score -= 10;
 							startEffect = System.currentTimeMillis();
 							effectActive = true;
+							(bird.getScore()).setRowInSheetID(6);
+							(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}else{
 						score += 10;
+						(bird.getScore()).setRowInSheetID(1);
+						(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}
 					}
 
@@ -666,8 +682,12 @@ public class AppFrame extends GameFrame {
 							score -= 15;
 							startEffect = System.currentTimeMillis();
 							effectActive = true;
+							(bird.getScore()).setRowInSheetID(7);
+							(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}else{
 						score += 15;
+						(bird.getScore()).setRowInSheetID(2);
+						(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}
 					}
 
@@ -690,8 +710,12 @@ public class AppFrame extends GameFrame {
 							score -= 20;
 							startEffect = System.currentTimeMillis();
 							effectActive = true;
+							(bird.getScore()).setRowInSheetID(8);
+							(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}else{
 						score += 20;
+						(bird.getScore()).setRowInSheetID(3);
+						(bird.getScore()).setPosition(bird.getPositionX(), bird.getPositionY());
 						}
 					}
 				}
@@ -704,6 +728,8 @@ public class AppFrame extends GameFrame {
 					((NormalSlideMoorhunhBird)normalBird).setDead(true);
 					playSound(deadSound);
 					score += 25;
+					(((NormalSlideMoorhunhBird)normalBird).getScore()).setRowInSheetID(4);
+					(((NormalSlideMoorhunhBird)normalBird).getScore()).setPosition(((NormalSlideMoorhunhBird)normalBird).getPosX(), ((NormalSlideMoorhunhBird)normalBird).getPosY());
 				}
 				
 				if (gameActive == true)
