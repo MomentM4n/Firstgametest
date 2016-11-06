@@ -13,9 +13,11 @@ public class MoorhunhBirdSheet {
 
 	private BufferedImage sheet = null;
 	private BufferedImage invertSheet = null;
+	private String imagePath;
 	private int frameW, frameH;
 	private int sheetW, sheetH;
 	private int offsetX = 0, offsetY = 0;
+	private boolean invert = false;
 	
 	public MoorhunhBirdSheet(){
 		
@@ -24,6 +26,7 @@ public class MoorhunhBirdSheet {
 	public MoorhunhBirdSheet(String imgName, int rows, int colums){
 		
 		sheet = Util.loadImage(imgName);
+		imagePath = imgName;
 		if(sheet == null){
 			sheet = null;
 			System.out.println("Ne ucitava sliku dobro");
@@ -35,6 +38,10 @@ public class MoorhunhBirdSheet {
 		frameW = sheet.getWidth()/sheetW;
 		frameH = sheet.getHeight()/sheetH;
 		
+	}
+	//COPY CONSTRUCTOR
+	public MoorhunhBirdSheet(MoorhunhBirdSheet newSheet){
+		this(newSheet.getImagePath(),newSheet.getColumnCount(),newSheet.getRowCount());
 	}
 	
 	public int getColumnCount() { return sheetW; }
@@ -99,12 +106,19 @@ public class MoorhunhBirdSheet {
 				sheet.setRGB(x, y, neg1);
 			}
 		}
+		invert = true;
 	}
 	
 	public void setOffsetX(int x) { offsetX = x; }
 	public void setOffsetY(int y) { offsetY = y; }
 	public int getOffsetX() { return offsetX; }
 	public int getOffsetY() { return offsetY; }
+	public BufferedImage getSheet() {return sheet; }
+	public void setSheet(BufferedImage sheet) {this.sheet = sheet; }
+	public String getImagePath() {return imagePath; }
+	public boolean isInvert() {return invert; }
+	
+	
 }
 
 	

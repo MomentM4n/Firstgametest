@@ -20,6 +20,7 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 	private boolean isDead = false;
 	private boolean stop = false;
 	private boolean goingDown = false;
+	private boolean psycho = false;
 	private int movingSpeed = 3;
 	
 	public NormalSlideMoorhunhBird(String nameOfImage, int PosX, int PosY) {
@@ -77,14 +78,30 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 			this.setStop(false);
 			this.setDead(false);
 			startTimeBird = 0;
+			int p = r.nextInt(2);
+			if(p == 1){
+				this.image = Util.loadImage("pictures/PsyBird.png");
+				psycho = true;
+			}
+			else{
+				this.image = Util.loadImage("pictures/NormalBird.png");
+				psycho = false;
+			}
 			this.setMovingSpeed(r.nextInt(3)+5);
 			this.setPosition(frame.getX() + r.nextInt((frame.getWidth() - 300) - frame.getX()),
 					(frame.getY() + frame.getHeight() + 200)
 							+ r.nextInt(10000 - (frame.getY() + frame.getHeight() + 1500)));
 		}
 		if(isDead){
-			this.setMovingSpeed(18);
+			this.setMovingSpeed(12);
 			this.setGoingDown(true);
+			if(isPsycho()){
+				this.image = Util.loadImage("pictures/PsyBird.png");
+			}
+			else{
+				this.image = Util.loadImage("pictures/DeadNormalBird.png");
+			}
+			
 			this.move(0, this.getMovingSpeed());
 		}
 
@@ -107,8 +124,10 @@ public class NormalSlideMoorhunhBird implements SlideMoorhunhBird {
 	public void setGoingDown(boolean goingDown) {this.goingDown = goingDown;}
 	public boolean isStop() {return stop; }
 	public void setStop(boolean stop) {this.stop = stop; }
-
 	public BufferedImage getImage() {return image; }
+	
+	public boolean isPsycho() {return psycho;}
+	public void setPsycho(boolean psycho) {this.psycho = psycho;}
 
 	@Override
 	public void draw(Graphics g, int posX, int posY) {
