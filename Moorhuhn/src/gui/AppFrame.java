@@ -54,6 +54,7 @@ public class AppFrame extends GameFrame {
 	private AudioClip shootSound;
 	private AudioClip emptySound;
 	private AudioClip reloadSound;
+	private AudioClip deadSound;
 	
 	
 	
@@ -95,6 +96,7 @@ public class AppFrame extends GameFrame {
 		shootSound = Applet.newAudioClip(getClass().getResource("/sounds/shootsound.wav"));
 		reloadSound = Applet.newAudioClip(getClass().getResource("/sounds/reloadsound.wav"));
 		emptySound = Applet.newAudioClip(getClass().getResource("/sounds/emptysound.wav"));
+		deadSound = Applet.newAudioClip(getClass().getResource("/sounds/deadsound.wav"));
 	}
 	
 	private void centerFrame() {
@@ -334,6 +336,7 @@ public class AppFrame extends GameFrame {
 						bird.setRowInSheetID(0);
 						bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
 						bird.setDead(true);
+						playSound(deadSound);
 
 					}
 
@@ -345,6 +348,7 @@ public class AppFrame extends GameFrame {
 						bird.setRowInSheetID(1);
 						bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
 						bird.setDead(true);
+						playSound(deadSound);
 					}
 
 					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 2
@@ -355,6 +359,7 @@ public class AppFrame extends GameFrame {
 						bird.setRowInSheetID(2);
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
+						playSound(deadSound);
 					}
 					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 3
 							&& sniper.contains(bird.getPositionX() + 43, bird.getPositionY() + 20,
@@ -364,7 +369,7 @@ public class AppFrame extends GameFrame {
 						bird.setRowInSheetID(3);
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
-
+						playSound(deadSound);
 					}
 
 					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 0
@@ -375,6 +380,7 @@ public class AppFrame extends GameFrame {
 						bird.setRowInSheetID(0);
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
+						playSound(deadSound);
 					}
 
 					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 1
@@ -385,6 +391,7 @@ public class AppFrame extends GameFrame {
 						bird.setRowInSheetID(1);
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
+						playSound(deadSound);
 					}
 
 					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 2
@@ -395,6 +402,7 @@ public class AppFrame extends GameFrame {
 						bird.setRowInSheetID(2);
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
+						playSound(deadSound);
 					}
 
 					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 3
@@ -405,20 +413,20 @@ public class AppFrame extends GameFrame {
 						bird.setRowInSheetID(3);
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
+						playSound(deadSound);
 					}
 				}
 				bullets.setCurrentNumberOfBullets(bullets.getCurrentNumberOfBullets() - 1);
-
-				if (button == GFMouseButton.Right) {
-					if (bullets.getCurrentNumberOfBullets() == 0) {
-						bullets.setCurrentNumberOfBullets(bullets.getMaxNumberOfBullets());
-						playSound(reloadSound);
-					}
-				}
 			} else {
-				playSound(shootSound);
+				playSound(emptySound);
 			}
 
+		}
+		if (button == GFMouseButton.Right) {
+			if (bullets.getCurrentNumberOfBullets() == 0) {
+				bullets.setCurrentNumberOfBullets(bullets.getMaxNumberOfBullets());
+				playSound(reloadSound);
+			}
 		}
 	}
 
