@@ -9,9 +9,9 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
-import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -78,10 +78,14 @@ public class AppFrame extends GameFrame {
 	private long playTime;
 	private int currentTimeMinutes;
 	private int currentTimeSeconds;
+	private long durationEffect;
+	private long startEffect;
 
 	private int score;
 	
 	private Feathers feathers;
+
+	private boolean effectActive;
 
 	public AppFrame() {
 
@@ -126,6 +130,8 @@ public class AppFrame extends GameFrame {
 		playTime = 60000;
 		score = 0;
 		feathers = new Feathers();
+		durationEffect = 10000;
+		effectActive = false;
 	}
 
 	private void centerFrame() {
@@ -201,6 +207,12 @@ public class AppFrame extends GameFrame {
 
 	@Override
 	public void render(Graphics2D g, int sw, int sh) {
+		if(effectActive) {
+			AffineTransform old = g.getTransform();
+			 g.translate(WIDTH, HEIGHT);
+			    g.rotate(180 * Math.PI/180);
+			    g.translate(-0, -0);;
+		}
 		g.setFont(new Font("Gulim", Font.BOLD, 30));
 		g.setColor(Color.RED);
 		if (gameActive) {
@@ -432,7 +444,11 @@ public class AppFrame extends GameFrame {
 		if (curTime[1] <= 0 && curTime[2] <= 0) {
 			gameActive = false;
 		}
-			
+		
+		if(durationEffect - (System.currentTimeMillis() - startEffect) <=0) {
+			effectActive = false;
+			System.out.println("KRAJ EFFECKTA");
+		}
 	
 	}
 	public int[] getTime()
@@ -467,6 +483,7 @@ public class AppFrame extends GameFrame {
 	public void restart() {
 		score = 0;
 		bullets.setCurrentNumberOfBullets(bullets.getMaxNumberOfBullets());
+		effectActive  = false;
 	}
 
 	@Override
@@ -499,8 +516,14 @@ public class AppFrame extends GameFrame {
 							bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
 							bird.setDead(true);
 							playSound(deadSound);
-							score += 5;
 							feathers.genEx(x, y, 10.0f, 300, 50);
+							if(bird.getSheet().isInvert()) {
+								score -= 5;
+								startEffect = System.currentTimeMillis();
+								effectActive = true;
+							}else{
+							score += 5;
+							}
 						}
 
 					}
@@ -519,8 +542,14 @@ public class AppFrame extends GameFrame {
 						bird.setPosition(bird.getPositionX() - 10, bird.getPositionY() - 20);
 						bird.setDead(true);
 						playSound(deadSound);
-						score += 20;
 						feathers.genEx(x, y, 10.0f, 300, 50);
+						if(bird.getSheet().isInvert()) {
+							score -= 10;
+							startEffect = System.currentTimeMillis();
+							effectActive = true;
+						}else{
+						score += 10;
+						}
 					}
 
 					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 2
@@ -537,8 +566,14 @@ public class AppFrame extends GameFrame {
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
 						playSound(deadSound);
-						score += 5;
 						feathers.genEx(x, y, 10.0f, 300, 50);
+						if(bird.getSheet().isInvert()) {
+							score -= 15;
+							startEffect = System.currentTimeMillis();
+							effectActive = true;
+						}else{
+						score += 15;
+						}
 					}
 					if (flyingBirds.get(bird).equals("left") && bird.getRowInSheetID() == 3
 							&& sniper.contains(bird.getPositionX() + 43, bird.getPositionY() + 20,
@@ -554,8 +589,14 @@ public class AppFrame extends GameFrame {
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
 						playSound(deadSound);
-						score += 5;
 						feathers.genEx(x, y, 10.0f, 300, 50);
+						if(bird.getSheet().isInvert()) {
+							score -= 20;
+							startEffect = System.currentTimeMillis();
+							effectActive = true;
+						}else{
+						score += 20;
+						}
 					}
 
 					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 0
@@ -572,8 +613,14 @@ public class AppFrame extends GameFrame {
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
 						playSound(deadSound);
-						score += 5;
 						feathers.genEx(x, y, 10.0f, 300, 50);
+						if(bird.getSheet().isInvert()) {
+							score -= 5;
+							startEffect = System.currentTimeMillis();
+							effectActive = true;
+						}else{
+						score += 5;
+						}
 					}
 
 					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 1
@@ -590,8 +637,14 @@ public class AppFrame extends GameFrame {
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
 						playSound(deadSound);
-						score += 5;
 						feathers.genEx(x, y, 10.0f, 300, 50);
+						if(bird.getSheet().isInvert()) {
+							score -= 10;
+							startEffect = System.currentTimeMillis();
+							effectActive = true;
+						}else{
+						score += 10;
+						}
 					}
 
 					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 2
@@ -608,8 +661,14 @@ public class AppFrame extends GameFrame {
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
 						playSound(deadSound);
-						score += 5;
 						feathers.genEx(x, y, 10.0f, 300, 50);
+						if(bird.getSheet().isInvert()) {
+							score -= 15;
+							startEffect = System.currentTimeMillis();
+							effectActive = true;
+						}else{
+						score += 15;
+						}
 					}
 
 					if (flyingBirds.get(bird).equals("right") && bird.getRowInSheetID() == 3
@@ -626,8 +685,14 @@ public class AppFrame extends GameFrame {
 						bird.setPosition(bird.getPositionX() - 20, bird.getPositionY() - 80);
 						bird.setDead(true);
 						playSound(deadSound);
-						score += 5;
 						feathers.genEx(x, y, 10.0f, 300, 50);
+						if(bird.getSheet().isInvert()) {
+							score -= 20;
+							startEffect = System.currentTimeMillis();
+							effectActive = true;
+						}else{
+						score += 20;
+						}
 					}
 				}
 				
